@@ -1,4 +1,4 @@
-import { NotificationOutlined, UserOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 
 export const menuList = {
   productFetch: {
@@ -10,6 +10,12 @@ export const menuList = {
     name: "상품관리",
     route: "/product-manage",
     icon: UserOutlined,
+    submenu: {
+      zentrade: {
+        name: "젠트레이드",
+        route: "/product-manage/zentrade",
+      },
+    },
   },
   orderManage: {
     name: "주문관리",
