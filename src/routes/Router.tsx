@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import PrivateRouter from "./PrivateRouter";
 import PublicRouter from "./PublicRouter";
-import ProductFetch from "src/components/pages/products/ProductFetch";
+import ProductFetch from "src/components/pages/product-fetch/ProductFetch";
 import GlobalErrorFallBack from "src/components/pages/errors/GlobalErrorFallBack";
 import ProductManage from "src/components/layout/product-manage";
 
