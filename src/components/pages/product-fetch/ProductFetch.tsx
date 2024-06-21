@@ -1,24 +1,11 @@
-import React, { useEffect, useState } from "react";
 import { Button, Checkbox } from "antd";
 import axios from "axios";
-import initSqlJs, { Database } from "sql.js";
 import { saveAs } from "file-saver";
+import { useState } from "react";
+import useSqliteDabase from "src/hooks/useSqliteDabase/indext";
 function ProductFetch() {
-  const [db, setDb] = useState<Database | null>(null);
+  const { db } = useSqliteDabase();
   const [data, setData] = useState<any[]>([]);
-
-  // 데이터베이스 초기화
-  useEffect(() => {
-    const initDatabase = async () => {
-      const SQL = await initSqlJs({
-        locateFile: (file) => `${process.env.PUBLIC_URL}/sql-wasm.wasm`,
-      });
-      const db = new SQL.Database();
-      setDb(db);
-    };
-
-    initDatabase();
-  }, []);
 
   // 데이터 가져오기
   const fetchData = async () => {
