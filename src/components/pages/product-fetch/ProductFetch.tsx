@@ -2,10 +2,12 @@ import { Button, Checkbox } from "antd";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import { useState } from "react";
-import useSqliteDabase from "src/hooks/useSqliteDabase/indext";
+import useSqliteDatabase from "src/hooks/useSqliteDabase/indext";
+
 function ProductFetch() {
-  const { db } = useSqliteDabase();
+  const { db, loading, error, loadDatabaseFromFile } = useSqliteDatabase();
   const [data, setData] = useState<any[]>([]);
+  const [fileName, setFileName] = useState<string>("");
 
   // 데이터 가져오기
   const fetchData = async () => {
@@ -151,7 +153,6 @@ function ProductFetch() {
 
       // 데이터 조회 예제
       const results = db.exec("SELECT * FROM products");
-      console.log(results);
     }
   };
 
@@ -163,12 +164,24 @@ function ProductFetch() {
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileName(file.name);
+      loadDatabaseFromFile(file);
+    }
+  };
+
   return (
     <div>
+      <input type="file" accept=".sqlite,.db" onChange={handleFileChange} />
+      {fileName && <p>Selected file: {fileName}</p>}
       <Checkbox>젠트레이드</Checkbox>
       <Button onClick={fetchData}>가져오기</Button>
       <Button onClick={handleInsert}>저장하기</Button>
       <Button onClick={saveDatabase}>데이터베이스 저장</Button>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error.message}</p>}
     </div>
   );
 }
