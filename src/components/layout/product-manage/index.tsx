@@ -32,7 +32,7 @@ function ProductManage() {
     saveAs(data, "products.xlsx");
   };
   return (
-    <div style={{ height: 1000, width: "100%" }}>
+    <div>
       <Button
         type="primary"
         onClick={handleExport}
@@ -40,6 +40,7 @@ function ProductManage() {
       >
         Export to Excel
       </Button>
+      <SqliteDatabaseLoader onDataLoaded={handleDataLoaded} />
       <DataGrid
         rows={productData}
         columns={productColumns}
@@ -54,7 +55,6 @@ function ProductManage() {
         checkboxSelection
         disableRowSelectionOnClick
       />
-      <SqliteDatabaseLoader onDataLoaded={handleDataLoaded} />
     </div>
   );
 }

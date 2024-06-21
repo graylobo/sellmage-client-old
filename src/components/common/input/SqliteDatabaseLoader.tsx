@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Button } from "antd";
+import React, { useState, useEffect } from "react";
 import useSqliteDatabase from "src/hooks/useSqliteDabase/indext";
 
 const SqliteDatabaseLoader = ({
@@ -18,22 +17,23 @@ const SqliteDatabaseLoader = ({
     }
   };
 
-  const handleSelect = () => {
+  useEffect(() => {
     if (db) {
-      const query = "SELECT * FROM products";
-      const res = db.exec(query);
-      const resultData = res[0]?.values || [];
-      onDataLoaded(resultData);
+      try {
+        const query = "SELECT * FROM products";
+        const res = db.exec(query);
+        const resultData = res[0]?.values || [];
+        onDataLoaded(resultData);
+      } catch (err) {
+        console.error("Error executing query:", err);
+      }
     }
-  };
+  }, [db, onDataLoaded]);
 
   return (
     <div>
       <input type="file" accept=".sqlite,.db" onChange={handleFileChange} />
       {fileName && <p>Selected file: {fileName}</p>}
-      <Button onClick={handleSelect} disabled={!db || loading}>
-        데이터 조회
-      </Button>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
     </div>
