@@ -1,17 +1,16 @@
-import React from "react";
+import PopupContent from "src/components/common/modeless/PopupContent";
 import { useModalStore } from "src/store/modal/store";
+import { openBrowserPopup } from "src/utils/open-browser-popup";
 
 function TestModal() {
-  const { addModal } = useModalStore();
+  const handleOpenPopup = () => {
+    openBrowserPopup(<PopupContent />, "Popup", 600, 400);
+  };
   return (
     <div>
       <button
         onClick={() => {
-          addModal({
-            title: "하하",
-            element: <div>하위 모달</div>,
-            isOpen: true,
-          });
+          handleOpenPopup();
         }}
       >
         하위

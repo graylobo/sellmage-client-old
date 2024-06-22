@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import BaseModal from "src/components/common/modal/base-modal";
+import PopupContent from "src/components/common/modeless/PopupContent";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -23,6 +24,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <App />
       <BaseModal />
+      <PopupContent />
     </QueryClientProvider>
   </React.StrictMode>
 );
