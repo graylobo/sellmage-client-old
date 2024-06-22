@@ -2,6 +2,8 @@ import { Button, Checkbox } from "antd";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import { useState } from "react";
+import TestModal from "src/components/common/modal/some";
+import { useModalStack } from "src/hooks/useModalStack";
 import useSqliteDatabase from "src/hooks/useSqliteDabase/indext";
 
 function ProductFetch() {
@@ -171,6 +173,16 @@ function ProductFetch() {
       loadDatabaseFromFile(file);
     }
   };
+  const { openModal, closeModal } = useModalStack();
+  const handleOpenKoreaLocationSelectorModal = () => {
+    openModal({
+      title: "testmodal",
+      element: <TestModal />,
+      handleConfirm: (data) => {
+        closeModal();
+      },
+    });
+  };
 
   return (
     <div>
@@ -180,6 +192,7 @@ function ProductFetch() {
       <Button onClick={fetchData}>가져오기</Button>
       <Button onClick={handleInsert}>저장하기</Button>
       <Button onClick={saveDatabase}>데이터베이스 저장</Button>
+      <Button onClick={handleOpenKoreaLocationSelectorModal}>모달</Button>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
     </div>
