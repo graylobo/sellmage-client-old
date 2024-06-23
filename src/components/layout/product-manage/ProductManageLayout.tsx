@@ -4,14 +4,14 @@ import { saveAs } from "file-saver";
 import { useEffect, useState } from "react";
 import SqliteDatabaseLoader from "src/components/common/input/SqliteDatabaseLoader";
 import { productColumns } from "src/const/product-column";
-import { Product } from "src/store/product/store";
+import useProductStore, { Product } from "src/store/product/store";
 import useSqliteDatabaseStore from "src/store/sqlite-database/store";
 import * as XLSX from "xlsx";
 
 const ProductManageLayout: React.FC = () => {
   const [productData, setProductData] = useState<Product[]>([]);
-
   const { db, loading, initDatabase, error } = useSqliteDatabaseStore();
+  const { setProductData: setZustandProductData } = useProductStore();
 
   useEffect(() => {
     initDatabase();
@@ -26,6 +26,7 @@ const ProductManageLayout: React.FC = () => {
       return obj;
     });
     setProductData(formattedData);
+    setZustandProductData("productKey", formattedData);
   };
 
   const handleExport = () => {
@@ -57,6 +58,12 @@ const ProductManageLayout: React.FC = () => {
     }
     return newRow;
   };
+  const saveDatabaseToFile = (db: any, fileName: string) => {
+    const data = db.export();
+    const buffer = new Uint8Array(data);
+    const blob = new Blob([buffer], { type: "application/octet-stream" });
+    saveAs(blob, fileName);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -65,8 +72,6 @@ const ProductManageLayout: React.FC = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-
-  console.log("db", db);
 
   return (
     <div>
@@ -87,6 +92,13 @@ const ProductManageLayout: React.FC = () => {
         }}
       >
         데이터읽기
+      </Button>
+      <Button
+        onClick={() => {
+          saveDatabaseToFile(db, "products.db");
+        }}
+      >
+        수정사항 반영
       </Button>
       <SqliteDatabaseLoader onDataLoaded={handleDataLoaded} />
       <DataGrid
