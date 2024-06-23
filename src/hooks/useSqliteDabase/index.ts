@@ -11,7 +11,7 @@ const useSqliteDatabase = () => {
       const SQL = await initSqlJs({
         locateFile: (file) => `${process.env.PUBLIC_URL}/sql-wasm.wasm`,
       });
-      let database;
+       let database;
       if (fileData) {
         database = new SQL.Database(new Uint8Array(fileData));
       } else {
@@ -25,7 +25,7 @@ const useSqliteDatabase = () => {
     }
   };
 
-  const loadDatabaseFromFile = (file: File) => {
+  const loadDatabaseFromFile = (file: File) => {  
     const reader = new FileReader();
     reader.onload = (event) => {
       const fileData = event.target?.result;

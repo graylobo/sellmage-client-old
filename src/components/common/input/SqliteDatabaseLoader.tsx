@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import useSqliteDatabase from "src/hooks/useSqliteDabase/indext";
+import useSqliteDatabase from "src/hooks/useSqliteDabase";
 
 const SqliteDatabaseLoader = ({
   onDataLoaded,
@@ -21,14 +21,16 @@ const SqliteDatabaseLoader = ({
     if (db) {
       try {
         const query = "SELECT * FROM products";
+        const query2 = "SELECT name FROM sqlite_master WHERE type='table';";
         const res = db.exec(query);
+        const res2 = db.exec(query2);
         const resultData = res[0]?.values || [];
         onDataLoaded(resultData);
       } catch (err) {
         console.error("Error executing query:", err);
       }
     }
-  }, [db, onDataLoaded]);
+  }, [db]);
 
   return (
     <div>

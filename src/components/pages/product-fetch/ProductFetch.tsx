@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 import { useState } from "react";
 import TestModal from "src/components/common/modal/some";
 import { useModalStack } from "src/hooks/useModalStack";
-import useSqliteDatabase from "src/hooks/useSqliteDabase/indext";
+import useSqliteDatabase from "src/hooks/useSqliteDabase";
 
 function ProductFetch() {
   const { db, loading, error, loadDatabaseFromFile } = useSqliteDatabase();

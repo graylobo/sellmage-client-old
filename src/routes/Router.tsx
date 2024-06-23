@@ -3,7 +3,7 @@ import PrivateRouter from "./PrivateRouter";
 import PublicRouter from "./PublicRouter";
 import ProductFetch from "src/components/pages/product-fetch/ProductFetch";
 import GlobalErrorFallBack from "src/components/pages/errors/GlobalErrorFallBack";
-import ProductManage from "src/components/layout/product-manage";
+import ProductManageLayout from "src/components/layout/product-manage/ProductManageLayout";
 
 function Router() {
   const router = createBrowserRouter([
@@ -18,7 +18,7 @@ function Router() {
         },
         {
           path: "/product-manage/:vendor",
-          element: <ProductManage />,
+          element: <ProductManageLayout />,
         },
       ],
     },
