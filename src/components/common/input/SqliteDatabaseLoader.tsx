@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
-import useSqliteDatabase from "src/hooks/useSqliteDabase";
+import useSqliteDatabaseStore from "src/store/sqlite-database/store";
 
 const SqliteDatabaseLoader = ({
   onDataLoaded,
 }: {
   onDataLoaded: (data: any[]) => void;
 }) => {
-  const { db, loading, error, loadDatabaseFromFile } = useSqliteDatabase();
+  const { db, loading, error, initDatabase, loadDatabaseFromFile } =
+    useSqliteDatabaseStore();
   const [fileName, setFileName] = useState<string>("");
+
+  useEffect(() => {
+    initDatabase();
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -21,9 +26,7 @@ const SqliteDatabaseLoader = ({
     if (db) {
       try {
         const query = "SELECT * FROM products";
-        const query2 = "SELECT name FROM sqlite_master WHERE type='table';";
         const res = db.exec(query);
-        const res2 = db.exec(query2);
         const resultData = res[0]?.values || [];
         onDataLoaded(resultData);
       } catch (err) {

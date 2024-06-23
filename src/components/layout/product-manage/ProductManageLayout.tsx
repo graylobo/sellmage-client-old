@@ -1,19 +1,21 @@
-// ProductManage.tsx
-
 import { DataGrid, GridRowModel } from "@mui/x-data-grid";
 import { Button } from "antd";
 import { saveAs } from "file-saver";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SqliteDatabaseLoader from "src/components/common/input/SqliteDatabaseLoader";
 import { productColumns } from "src/const/product-column";
-import useSqliteDatabase from "src/hooks/useSqliteDabase";
 import { Product } from "src/store/product/store";
+import useSqliteDatabaseStore from "src/store/sqlite-database/store";
 import * as XLSX from "xlsx";
 
 const ProductManageLayout: React.FC = () => {
   const [productData, setProductData] = useState<Product[]>([]);
 
-  const { db, loading, error } = useSqliteDatabase();
+  const { db, loading, initDatabase, error } = useSqliteDatabaseStore();
+
+  useEffect(() => {
+    initDatabase();
+  }, []);
 
   const handleDataLoaded = (loadedData: any[]) => {
     const formattedData: Product[] = loadedData.map((item, index) => {
@@ -78,7 +80,7 @@ const ProductManageLayout: React.FC = () => {
       <Button
         onClick={() => {
           if (db) {
-            const query = "SELECT name FROM sqlite_master WHERE type='table';";
+            const query = "SELECT * FROM products;";
             const result = db.exec(query);
             console.log(result);
           }

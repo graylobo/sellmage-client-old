@@ -24,6 +24,9 @@ const useSqliteDatabaseStore = create<DatabaseState>((set) => ({
       } else {
         database = new SQL.Database();
       }
+      const query = "SELECT name FROM sqlite_master WHERE type='table';";
+      const result = database.exec(query);
+      console.log(result);
       set({ db: database, loading: false, error: null });
     } catch (err) {
       set({ error: err, loading: false });

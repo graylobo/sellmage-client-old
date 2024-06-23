@@ -1,15 +1,20 @@
 import { Button, Checkbox } from "antd";
 import axios from "axios";
 import { saveAs } from "file-saver";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TestModal from "src/components/common/modal/some";
 import { useModalStack } from "src/hooks/useModalStack";
-import useSqliteDatabase from "src/hooks/useSqliteDabase";
+import useSqliteDatabaseStore from "src/store/sqlite-database/store";
 
 function ProductFetch() {
-  const { db, loading, error, loadDatabaseFromFile } = useSqliteDatabase();
+  const { db, loading, error, initDatabase, loadDatabaseFromFile } =
+    useSqliteDatabaseStore();
   const [data, setData] = useState<any[]>([]);
   const [fileName, setFileName] = useState<string>("");
+
+  useEffect(() => {
+    initDatabase();
+  }, []);
 
   // 데이터 가져오기
   const fetchData = async () => {
