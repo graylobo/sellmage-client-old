@@ -3,6 +3,8 @@ import { Button } from "antd";
 import { saveAs } from "file-saver";
 import { useEffect, useState } from "react";
 import SqliteDatabaseLoader from "src/components/common/input/SqliteDatabaseLoader";
+import PopupContent from "src/components/common/modeless/PopupContent";
+import { BrowserPopup } from "src/components/common/browser-popup/BrowserPopup";
 import { productColumns } from "src/const/product-column";
 import useProductStore, { Product } from "src/store/product/store";
 import useSqliteDatabaseStore from "src/store/sqlite-database/store";
@@ -72,7 +74,6 @@ const ProductManageLayout: React.FC = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-
   return (
     <div>
       <Button
@@ -100,6 +101,8 @@ const ProductManageLayout: React.FC = () => {
       >
         수정사항 반영
       </Button>
+      <BrowserPopup name="ㅌㅌㅌ" children={<PopupContent />} />
+
       <SqliteDatabaseLoader onDataLoaded={handleDataLoaded} />
       <DataGrid
         rows={productData}
