@@ -3,7 +3,7 @@ import { Button } from "antd";
 import { saveAs } from "file-saver";
 import { useEffect, useState } from "react";
 import SqliteDatabaseLoader from "src/components/common/input/SqliteDatabaseLoader";
-import PopupContent from "src/components/common/modeless/PopupContent";
+import ProductInsertModal from "src/components/common/modeless/ProductInsertModal";
 import { BrowserPopup } from "src/components/common/browser-popup/BrowserPopup";
 import { productColumns } from "src/const/product-column";
 import useProductStore, { Product } from "src/store/product/store";
@@ -14,7 +14,6 @@ const ProductManageLayout: React.FC = () => {
   const [productData, setProductData] = useState<Product[]>([]);
   const { db, loading, initDatabase, error } = useSqliteDatabaseStore();
   const {
-    products,
     setProductData: setZustandProductData,
     getSelectedRows,
     setSelectedRows,
@@ -33,7 +32,6 @@ const ProductManageLayout: React.FC = () => {
       return obj;
     });
     setProductData(formattedData);
-    setZustandProductData("productKey", formattedData);
   };
 
   const handleExport = () => {
@@ -122,7 +120,7 @@ const ProductManageLayout: React.FC = () => {
         disabled={productData.length === 0}
         name="ㅌㅌㅌ"
         config={{ width: "80%", height: "80%" }}
-        children={<PopupContent />}
+        children={<ProductInsertModal />}
       />
 
       <SqliteDatabaseLoader onDataLoaded={handleDataLoaded} />
