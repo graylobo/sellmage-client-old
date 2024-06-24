@@ -13,7 +13,12 @@ import * as XLSX from "xlsx";
 const ProductManageLayout: React.FC = () => {
   const [productData, setProductData] = useState<Product[]>([]);
   const { db, loading, initDatabase, error } = useSqliteDatabaseStore();
-  const { setProductData: setZustandProductData } = useProductStore();
+  const {
+    products,
+    setProductData: setZustandProductData,
+    getSelectedRows,
+    setSelectedRows,
+  } = useProductStore();
 
   useEffect(() => {
     initDatabase();
@@ -32,7 +37,12 @@ const ProductManageLayout: React.FC = () => {
   };
 
   const handleExport = () => {
-    const worksheet = XLSX.utils.json_to_sheet(productData);
+    const selectedRows = getSelectedRows("productKey");
+    const selectedData = productData.filter((row) =>
+      selectedRows.includes(row.id)
+    );
+
+    const worksheet = XLSX.utils.json_to_sheet(selectedData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
     const excelBuffer = XLSX.write(workbook, {
@@ -66,7 +76,13 @@ const ProductManageLayout: React.FC = () => {
     const blob = new Blob([buffer], { type: "application/octet-stream" });
     saveAs(blob, fileName);
   };
-
+  const handleRowSelection = (newSelection: number[]) => {
+    setSelectedRows("productKey", newSelection);
+    const selectedData = productData.filter((row) =>
+      newSelection.includes(row.id)
+    );
+    setZustandProductData("productKey", selectedData);
+  };
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -124,7 +140,7 @@ const ProductManageLayout: React.FC = () => {
         checkboxSelection
         disableRowSelectionOnClick
         onRowSelectionModelChange={(newSelection) => {
-          console.log(newSelection);
+          handleRowSelection(newSelection as number[]);
         }}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={(error) => {
