@@ -1,25 +1,49 @@
+import { Button } from "antd";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 
-interface BrowserPopupProps {
-  name: string;
-  children: React.ReactNode;
+interface PopupConfig {
+  width: number | string;
+  height: number | string;
 }
 
-export const BrowserPopup = ({ name, children }: BrowserPopupProps) => {
+interface BrowserPopupProps {
+  name: string;
+  title?: string;
+  disabled?: boolean;
+  children: React.ReactNode;
+  config?: PopupConfig;
+}
+
+export const BrowserPopup = ({
+  name,
+  title,
+  children,
+  disabled,
+  config,
+}: BrowserPopupProps) => {
   const _window = useRef<any>(null);
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-    // If open, create window and store in ref
-    if (open) {
-      _window.current = window.open(
-        "",
-        "",
-        "width=600,height=400,left=200,top=200"
-      );
 
-      // Save reference to window for cleanup
+  useEffect(() => {
+    if (open) {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const width =
+        typeof config?.width === "string"
+          ? (parseInt(config.width) / 100) * screenWidth
+          : config?.width || 600;
+      const height =
+        typeof config?.height === "string"
+          ? (parseInt(config.height) / 100) * screenHeight
+          : config?.height || 400;
+      const left = screenWidth / 2 / 2;
+      const top = (screenHeight - height) / 2;
+
+      const features = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`;
+      _window.current = window.open("", "", features);
+
       const curWindow = _window.current;
       curWindow.document.write(`
         <!DOCTYPE html>
@@ -27,7 +51,7 @@ export const BrowserPopup = ({ name, children }: BrowserPopupProps) => {
           <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-           
+            <title>${title}</title>
           </head>
           <body>
             <div id="root"></div>
@@ -41,13 +65,11 @@ export const BrowserPopup = ({ name, children }: BrowserPopupProps) => {
       };
 
       setReady(true);
-
-      // Return cleanup function
     } else {
       _window.current?.close();
       setReady(false);
     }
-  }, [open]);
+  }, [open, config]);
 
   useEffect(() => {
     if (_window.current) {
@@ -57,11 +79,14 @@ export const BrowserPopup = ({ name, children }: BrowserPopupProps) => {
 
   return (
     <>
-      <button onClick={() => setOpen(true)}>{name}</button>
+      <Button disabled={disabled} onClick={() => setOpen(true)}>
+        {name}
+      </Button>
       {open && ready && createPortal(children, _window.current?.document.body)}
     </>
   );
 };
+
 function copyStyles(src, dest) {
   Array.from(src.styleSheets).forEach((styleSheet: any) => {
     dest.head.appendChild(styleSheet.ownerNode.cloneNode(true));

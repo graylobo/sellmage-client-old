@@ -74,6 +74,7 @@ const ProductManageLayout: React.FC = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
   return (
     <div>
       <Button
@@ -101,7 +102,12 @@ const ProductManageLayout: React.FC = () => {
       >
         수정사항 반영
       </Button>
-      <BrowserPopup name="ㅌㅌㅌ" children={<PopupContent />} />
+      <BrowserPopup
+        disabled={productData.length === 0}
+        name="ㅌㅌㅌ"
+        config={{ width: "80%", height: "80%" }}
+        children={<PopupContent />}
+      />
 
       <SqliteDatabaseLoader onDataLoaded={handleDataLoaded} />
       <DataGrid

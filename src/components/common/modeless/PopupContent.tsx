@@ -2,19 +2,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import { createStyles, css } from "antd-style";
 import { productColumns } from "src/const/product-column";
 import useProductStore from "src/store/product/store";
-const useStyles = createStyles(() => ({
-  test: css`
-    width: 300px;
-    height: 300px;
-    background-color: red;
-  `,
-}));
+
 const PopupContent = () => {
   const { products } = useProductStore();
-  const { styles } = useStyles();
   return (
-    <div style={{ width: "800px" }}>
-      <div className={styles.test}>가보자</div>
+    <div>
       <DataGrid
         rows={products["productKey"].data || []}
         columns={productColumns}
