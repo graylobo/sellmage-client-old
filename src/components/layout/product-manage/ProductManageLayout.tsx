@@ -9,10 +9,15 @@ import { productColumns } from "src/const/product-column";
 import useProductStore, { Product } from "src/store/product/store";
 import useSqliteDatabaseStore from "src/store/sqlite-database/store";
 import * as XLSX from "xlsx";
+import { useParams } from "react-router-dom";
+import { useGetProducts } from "src/hooks/useProducts";
 
 const ProductManageLayout: React.FC = () => {
   const [productData, setProductData] = useState<Product[]>([]);
   const { db, loading, initDatabase, error } = useSqliteDatabaseStore();
+  const { vendor } = useParams();
+  const { data } = useGetProducts(vendor);
+
   const {
     setProductData: setZustandProductData,
     getSelectedRows,
@@ -68,12 +73,7 @@ const ProductManageLayout: React.FC = () => {
     }
     return newRow;
   };
-  const saveDatabaseToFile = (db: any, fileName: string) => {
-    const data = db.export();
-    const buffer = new Uint8Array(data);
-    const blob = new Blob([buffer], { type: "application/octet-stream" });
-    saveAs(blob, fileName);
-  };
+
   const handleRowSelection = (newSelection: number[]) => {
     setSelectedRows("productKey", newSelection);
     const selectedData = productData.filter((row) =>
@@ -98,30 +98,6 @@ const ProductManageLayout: React.FC = () => {
       >
         Export to Excel
       </Button>
-      <Button
-        onClick={() => {
-          if (db) {
-            const query = "SELECT * FROM products;";
-            const result = db.exec(query);
-            console.log(result);
-          }
-        }}
-      >
-        데이터읽기
-      </Button>
-      <Button
-        onClick={() => {
-          saveDatabaseToFile(db, "products.db");
-        }}
-      >
-        수정사항 반영
-      </Button>
-      <BrowserPopup
-        disabled={productData.length === 0}
-        name="ㅌㅌㅌ"
-        config={{ width: "80%", height: "80%" }}
-        children={<ProductInsertModal />}
-      />
 
       <SqliteDatabaseLoader onDataLoaded={handleDataLoaded} />
       <DataGrid
