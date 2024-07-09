@@ -38,11 +38,11 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws s3 cp --region ap-northeast-2 ./build-fe.zip s3://bongbong-github-actions-tutorial/build-fe.zip
+          aws s3 cp --region ap-northeast-2 ./build-fe.zip s3://bongbong-github-actions-bucket/build-fe.zip
 
       - name: Deploy # Deploy to EC2
         run: aws deploy create-deployment
           --application-name bongbong-practice
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name bongbong-deploy-groupName
-          --s3-location bucket=bongbong-github-actions-tutorial,key=build-fe.zip,bundleType=zip
+          --s3-location bucket=bongbong-github-actions-bucket,key=build-fe.zip,bundleType=zip
