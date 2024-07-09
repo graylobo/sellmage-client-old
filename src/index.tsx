@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import BaseModal from "src/components/common/modal/base-modal";
-
+console.log("test");
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
