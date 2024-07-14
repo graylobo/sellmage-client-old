@@ -10,8 +10,10 @@ export interface ProductState {
   data?: Product[];
 }
 
+export type ProductsState = Record<string, ProductState>;
+
 export interface StoreState {
-  products: Record<string, ProductState>;
+  products: ProductsState;
   setProductData: (key: string, data: Product[]) => void;
   setSelectedRows: (key: string, rows: number[]) => void;
   getSelectedRows: (key: string) => number[];

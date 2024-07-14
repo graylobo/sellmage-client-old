@@ -54,7 +54,7 @@ const ProductManageLayout: React.FC = () => {
       <BrowserPopup
         disabled={isProductEmpty}
         name={"선택 상품등록"}
-        element={<ProductInsertModal />}
+        element={<ProductInsertModal products={products} />}
       ></BrowserPopup>
 
       <DataGrid

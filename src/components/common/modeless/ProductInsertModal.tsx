@@ -1,9 +1,14 @@
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import { Button } from "antd";
 import { productColumns } from "src/const/product-column";
+import { ProductsState } from "src/store/product/store";
 import { createXmlFromRowData } from "src/utils/create-xml-from-row-data";
 
-const ProductInsertModal = ({ products }: any) => {
+interface ProductInsertModalProps {
+  products: ProductsState;
+}
+
+const ProductInsertModal = ({ products }: ProductInsertModalProps) => {
   const apiRef = useGridApiRef();
 
   const handleProductInsert = () => {
