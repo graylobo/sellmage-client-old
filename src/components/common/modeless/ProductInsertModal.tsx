@@ -1,15 +1,13 @@
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import { Button } from "antd";
 import { productColumns } from "src/const/product-column";
-import useProductStore from "src/store/product/store";
 import { createXmlFromRowData } from "src/utils/create-xml-from-row-data";
 
-const ProductInsertModal = () => {
-  const { products } = useProductStore();
+const ProductInsertModal = ({ products }: any) => {
   const apiRef = useGridApiRef();
 
   const handleProductInsert = () => {
-    const datas = products["productKey"].data;
+    const datas = products["prOoductKey"].data;
     if (datas) {
       for (const data of datas) {
         const test = createXmlFromRowData(data);
@@ -24,10 +22,11 @@ const ProductInsertModal = () => {
       }
     }
   };
+
   return (
     <div>
       <DataGrid
-        rows={products["productKey"].data || []}
+        rows={products["productKey"]?.data || []}
         apiRef={apiRef}
         columns={productColumns}
         initialState={{

@@ -2,6 +2,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "antd";
 import { saveAs } from "file-saver";
 import { useParams } from "react-router-dom";
+import { BrowserPopup } from "src/components/common/browser-popup/BrowserPopup";
+import ProductInsertModal from "src/components/common/modeless/ProductInsertModal";
 import { productColumns } from "src/const/product-column";
 import { useGetProducts } from "src/hooks/useProducts";
 import useProductStore from "src/store/product/store";
@@ -9,12 +11,12 @@ import * as XLSX from "xlsx";
 
 const ProductManageLayout: React.FC = () => {
   const { vendor } = useParams();
-  const { data: products, isError, error } = useGetProducts(vendor);
-  const { setProductData, getSelectedRows, setSelectedRows } =
+  const { data: initialProducts, isError, error } = useGetProducts(vendor);
+  const { products, setProductData, getSelectedRows, setSelectedRows } =
     useProductStore();
   const handleExport = () => {
     const selectedRows = getSelectedRows("productKey");
-    const selectedData = products.filter((row) =>
+    const selectedData = initialProducts.filter((row) =>
       selectedRows.includes(row.id)
     );
 
@@ -31,11 +33,14 @@ const ProductManageLayout: React.FC = () => {
 
   const handleRowSelection = (newSelection: number[]) => {
     setSelectedRows("productKey", newSelection);
-    const selectedData = products.filter((product) =>
+    const selectedData = initialProducts.filter((product) =>
       newSelection.includes(product.id)
     );
     setProductData("productKey", selectedData);
   };
+
+  const isProductEmpty =
+    !products["productKey"]?.data || products["productKey"].data.length === 0;
 
   return (
     <div>
@@ -46,9 +51,14 @@ const ProductManageLayout: React.FC = () => {
       >
         Export to Excel
       </Button>
+      <BrowserPopup
+        disabled={isProductEmpty}
+        name={"선택 상품등록"}
+        element={<ProductInsertModal />}
+      ></BrowserPopup>
 
       <DataGrid
-        rows={products}
+        rows={initialProducts}
         columns={productColumns}
         initialState={{
           pagination: {

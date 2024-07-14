@@ -11,14 +11,14 @@ interface BrowserPopupProps {
   name: string;
   title?: string;
   disabled?: boolean;
-  children: React.ReactNode;
+  element: React.ReactNode;
   config?: PopupConfig;
 }
 
 export const BrowserPopup = ({
   name,
   title,
-  children,
+  element,
   disabled,
   config,
 }: BrowserPopupProps) => {
@@ -82,7 +82,7 @@ export const BrowserPopup = ({
       <Button disabled={disabled} onClick={() => setOpen(true)}>
         {name}
       </Button>
-      {open && ready && createPortal(children, _window.current?.document.body)}
+      {open && ready && createPortal(element, _window.current?.document.body)}
     </>
   );
 };
