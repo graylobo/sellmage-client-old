@@ -1,6 +1,9 @@
 import { DataGrid, useGridApiRef } from "@mui/x-data-grid";
 import { Button } from "antd";
-import { productColumns } from "src/const/product-column";
+import {
+  productColumnVisibilityModel as columnVisibilityModel,
+  productColumns,
+} from "src/const/product-column";
 import { ProductsState } from "src/store/product/store";
 import { createXmlFromRowData } from "src/utils/create-xml-from-row-data";
 
@@ -35,6 +38,7 @@ const ProductInsertModal = ({ products }: ProductInsertModalProps) => {
         apiRef={apiRef}
         columns={productColumns}
         initialState={{
+          columns: { columnVisibilityModel },
           pagination: {
             paginationModel: {
               pageSize: 20,
